@@ -1,0 +1,72 @@
+<mat-card class="filter-card">
+  <mat-card-content>
+    <form [formGroup]="filterForm" class="filter-form">
+      <!-- Search Input (Large) -->
+      <mat-form-field class="search-field" appearance="outline">
+        <mat-label>Search trainees...</mat-label>
+        <input matInput 
+               formControlName="searchTerm" 
+               placeholder="Search by name or subject"
+               (input)="onFilterChange()">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Additional Filters -->
+      <div class="additional-filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Subject</mat-label>
+          <mat-select formControlName="subject" (selectionChange)="onFilterChange()">
+            <mat-option value="">All Subjects</mat-option>
+            <mat-option value="Mathematics">Mathematics</mat-option>
+            <mat-option value="Physics">Physics</mat-option>
+            <mat-option value="Chemistry">Chemistry</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Min Grade</mat-label>
+          <input matInput 
+                 type="number" 
+                 formControlName="minGrade" 
+                 min="0" 
+                 max="100"
+                 (input)="onFilterChange()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Max Grade</mat-label>
+          <input matInput 
+                 type="number" 
+                 formControlName="maxGrade" 
+                 min="0" 
+                 max="100"
+                 (input)="onFilterChange()">
+        </mat-form-field>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button mat-raised-button 
+                color="primary" 
+                (click)="onAddClick()">
+          <mat-icon>add</mat-icon>
+          Add Trainee
+        </button>
+        
+        <button mat-raised-button 
+                color="warn" 
+                [disabled]="!(selectedTrainee$ | async)"
+                (click)="onRemoveClick()">
+          <mat-icon>delete</mat-icon>
+          Remove Selected
+        </button>
+
+        <button mat-button 
+                (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          Clear Filters
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Trainee Management System</span>
+    <span class="spacer"></span>
+    <nav>
+      <a mat-button routerLink="/data" routerLinkActive="active">Data</a>
+      <a mat-button routerLink="/analysis" routerLinkActive="active">Analysis</a>
+      <a mat-button routerLink="/monitor" routerLinkActive="active">Monitor</a>
+    </nav>
+  </mat-toolbar-row>
+</mat-toolbar>
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,85 @@
+.table-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  flex: 1;
+}
+
+.loading-container p {
+  margin-top: 16px;
+  color: #666;
+}
+
+.table-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.trainee-table {
+  flex: 1;
+  width: 100%;
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.selected-row {
+  background-color: rgba(63, 81, 181, 0.1) !important;
+}
+
+.grade-excellent {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.grade-good {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.grade-needs-improvement {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  flex: 1;
+  color: #666;
+}
+
+.no-data mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+mat-paginator {
+  border-top: 1px solid #e0e0e0;
+  margin-top: auto;
+}
+
+mat-chip {
+  font-size: 12px;
+}

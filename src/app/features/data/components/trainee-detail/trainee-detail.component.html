@@ -1,0 +1,243 @@
+<mat-card class="detail-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>person</mat-icon>
+      Trainee Details
+    </mat-card-title>
+    
+    <!-- Action Buttons in Header -->
+    <div class="header-actions" *ngIf="trainee">
+      <ng-container *ngIf="!isEditing">
+        <button mat-icon-button 
+                color="primary"
+                matTooltip="Edit trainee"
+                (click)="startEdit()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </ng-container>
+      
+      <ng-container *ngIf="isEditing">
+        <button mat-icon-button 
+                color="primary"
+                matTooltip="Save changes"
+                [disabled]="traineeForm.invalid"
+                (click)="saveChanges()">
+          <mat-icon>save</mat-icon>
+        </button>
+        
+        <button mat-icon-button 
+                color="warn"
+                matTooltip="Cancel editing"
+                (click)="cancelEdit()">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </ng-container>
+    </div>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <div *ngIf="trainee; else noSelection" class="trainee-details">
+      
+      <!-- Edit Mode Form -->
+      <form [formGroup]="traineeForm" *ngIf="isEditing" class="edit-form">
+        
+        <!-- Basic Info Section -->
+        <div class="form-section">
+          <h4>Basic Information</h4>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="id" readonly>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="hasError('name')">{{getErrorMessage('name')}}</mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email">
+            <mat-error *ngIf="hasError('email')">{{getErrorMessage('email')}}</mat-error>
+          </mat-form-field>
+        </div>
+        
+        <!-- Academic Info Section -->
+        <div class="form-section">
+          <h4>Academic Information</h4>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Subject</mat-label>
+            <mat-select formControlName="subject">
+              <mat-option *ngFor="let subject of subjects" [value]="subject">
+                {{subject}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Grade</mat-label>
+            <input matInput type="number" min="0" max="100" formControlName="grade">
+            <mat-error *ngIf="hasError('grade')">{{getErrorMessage('grade')}}</mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Date Joined</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateJoined">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        
+        <!-- Address Info Section -->
+        <div class="form-section">
+          <h4>Address Information</h4>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>Address</mat-label>
+            <textarea matInput formControlName="address" rows="2"></textarea>
+            <mat-error *ngIf="hasError('address')">{{getErrorMessage('address')}}</mat-error>
+          </mat-form-field>
+          
+          <div class="address-row">
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city">
+              <mat-error *ngIf="hasError('city')">{{getErrorMessage('city')}}</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <input matInput formControlName="country">
+              <mat-error *ngIf="hasError('country')">{{getErrorMessage('country')}}</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>ZIP Code</mat-label>
+              <input matInput formControlName="zip">
+              <mat-error *ngIf="hasError('zip')">{{getErrorMessage('zip')}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        
+      </form>
+      
+      <!-- View Mode -->
+      <div *ngIf="!isEditing" class="view-mode">
+        
+        <!-- Profile Section -->
+        <div class="profile-section">
+          <div class="avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+          <h3>{{trainee.name}}</h3>
+          <p class="email">{{trainee.email}}</p>
+        </div>
+
+        <!-- Details List - Scrollable -->
+        <div class="details-container">
+          <mat-list class="details-list">
+            <mat-list-item>
+              <mat-icon matListItemIcon>tag</mat-icon>
+              <div matListItemTitle>ID</div>
+              <div matListItemLine>{{trainee.id}}</div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon matListItemIcon>school</mat-icon>
+              <div matListItemTitle>Subject</div>
+              <div matListItemLine>
+                <mat-chip [color]="getSubjectColor(trainee.subject)">
+                  {{trainee.subject}}
+                </mat-chip>
+              </div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon matListItemIcon>grade</mat-icon>
+              <div matListItemTitle>Grade</div>
+              <div matListItemLine>
+                <div class="grade-display">
+                  <span [ngClass]="getGradeClass(trainee.grade)" class="grade-value">
+                    {{trainee.grade}}
+                  </span>
+                  <mat-progress-bar 
+                    [value]="trainee.grade" 
+                    [color]="getGradeProgressColor(trainee.grade)"
+                    class="grade-progress">
+                  </mat-progress-bar>
+                </div>
+              </div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon matListItemIcon>calendar_today</mat-icon>
+              <div matListItemTitle>Date Joined</div>
+              <div matListItemLine>{{trainee.dateJoined | date:'mediumDate'}}</div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon matListItemIcon>home</mat-icon>
+              <div matListItemTitle>Address</div>
+              <div matListItemLine class="address-text">{{trainee.address}}</div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon matListItemIcon>location_city</mat-icon>
+              <div matListItemTitle>City</div>
+              <div matListItemLine>{{trainee.city}}</div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon matListItemIcon>public</mat-icon>
+              <div matListItemTitle>Country</div>
+              <div matListItemLine>{{trainee.country}}</div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon matListItemIcon>markunread_mailbox</mat-icon>
+              <div matListItemTitle>ZIP Code</div>
+              <div matListItemLine>{{trainee.zip}}</div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+
+        <!-- Performance Indicator -->
+        <div class="performance-section">
+          <h4>Performance</h4>
+          <div class="performance-indicator">
+            <mat-icon [ngClass]="getPerformanceIconClass(trainee.grade)">
+              {{getPerformanceIcon(trainee.grade)}}
+            </mat-icon>
+            <span [ngClass]="getGradeClass(trainee.grade)" class="performance-text">
+              {{getPerformanceText(trainee.grade)}}
+            </span>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <ng-template #noSelection>
+      <div class="no-selection">
+        <mat-icon>touch_app</mat-icon>
+        <p>Select a trainee from the table to view details</p>
+      </div>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

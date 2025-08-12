@@ -1,0 +1,81 @@
+<mat-card class="filter-card">
+  <mat-card-content>
+    <div class="filter-container">
+      
+      <!-- Smart Filter Input -->
+      <div class="smart-filter-section">
+        <mat-form-field class="smart-filter-field" appearance="outline">
+          <mat-label>Smart Filter</mat-label>
+          <input matInput 
+                 [formControl]="filterControl"
+                 placeholder='Try: "john", "grade:>85", "city:New York"'>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        
+        <div class="filter-actions">
+          <button mat-icon-button 
+                  matTooltip="Clear filter"
+                  (click)="clearFilter()"
+                  [disabled]="!filterControl.value">
+            <mat-icon>clear</mat-icon>
+          </button>
+          
+          <button mat-icon-button 
+                  matTooltip="Show help"
+                  (click)="toggleHelp()"
+                  [class.active]="showHelp">
+            <mat-icon>help_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <div class="help-section" *ngIf="showHelp">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Filter Syntax Help</mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <div class="help-content">
+            <h4>Quick Suggestions:</h4>
+            <div class="suggestions">
+              <mat-chip-set>
+                <mat-chip *ngFor="let suggestion of suggestions" 
+                          (click)="insertSuggestion(suggestion)"
+                          class="suggestion-chip">
+                  {{suggestion}}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+            
+            <h4>Examples:</h4>
+            <ul class="examples-list">
+              <li *ngFor="let example of getExamples()">
+                <code>{{example.split(' - ')[0]}}</code> - {{example.split(' - ')[1]}}
+              </li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button mat-raised-button 
+                color="primary" 
+                (click)="onAddClick()">
+          <mat-icon>add</mat-icon>
+          Add Trainee
+        </button>
+        
+        <button mat-raised-button 
+                color="warn" 
+                [disabled]="!(selectedTrainee$ | async)"
+                (click)="onRemoveClick()">
+          <mat-icon>delete</mat-icon>
+          Remove Selected
+        </button>
+      </div>
+      
+    </div>
+  </mat-card-content>
+</mat-card>

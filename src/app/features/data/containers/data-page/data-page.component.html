@@ -1,0 +1,33 @@
+<div class="data-page-container">
+  <!-- Smart Filter Section -->
+  <div class="filter-bar">
+    <app-smart-filter 
+      (filterChange)="onFilterChange($event)"
+      (addTrainee)="onAddTrainee()">
+    </app-smart-filter>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content-area">
+    <!-- Table Section (80% width) -->
+    <div class="table-section">
+      <mat-card>
+        <mat-card-content>
+          <app-trainee-table
+            [trainees]="((allTrainees$ | async) || []) | smartFilter:currentFilter"
+            [loading]="loading$ | async"
+            [selectedTrainee]="selectedTrainee$ | async"
+            (traineeSelected)="onTraineeSelected($event)">
+          </app-trainee-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Detail Panel (20% width) -->
+    <div class="detail-section">
+      <app-trainee-detail
+        [trainee]="selectedTrainee$ | async">
+      </app-trainee-detail>
+    </div>
+  </div>
+</div>
