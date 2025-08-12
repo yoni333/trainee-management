@@ -1,34 +1,638 @@
+/* app/features/monitor/monitor.component.scss */
+
 .monitor-container {
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.placeholder-content {
+/* Header Section */
+.header-section {
   text-align: center;
+  margin-bottom: 8px;
+  
+  h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 500;
+    color: #333;
+    
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: #3f51b5;
+    }
+  }
+  
+  .subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+  }
+}
+
+/* Statistics Cards */
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.stat-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  
+  &.total {
+    border-left: 4px solid #2196f3;
+  }
+  
+  &.passed {
+    border-left: 4px solid #4caf50;
+  }
+  
+  &.failed {
+    border-left: 4px solid #f44336;
+  }
+  
+  &.pass-rate {
+    border-left: 4px solid #ff9800;
+  }
+  
+  mat-card-content {
+    padding: 16px !important;
+  }
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  
+  mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    
+    .total & { color: #2196f3; }
+    .passed & { color: #4caf50; }
+    .failed & { color: #f44336; }
+    .pass-rate & { color: #ff9800; }
+  }
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  
+  .stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+}
+
+/* Filters Section */
+.filters-card {
+  .filters-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .filter-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .ids-field {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .ids-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+  }
+  
+  .names-field {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .state-filter-section {
+    h4 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+    }
+  }
+  
+  .state-checkboxes {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    
+    mat-checkbox {
+      display: flex;
+      align-items: center;
+      
+      .status-icon {
+        margin-right: 8px;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        
+        &.passed { color: #4caf50; }
+        &.failed { color: #f44336; }
+      }
+    }
+  }
+  
+  .filter-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+  }
+}
+
+/* Loading Section */
+.loading-section {
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+    
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 16px;
+    }
+  }
+}
+
+/* Results Table */
+.results-card {
+  .table-content {
+    padding: 0;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+}
+
+.monitor-table {
+  width: 100%;
+  
+  th {
+    background-color: #fafafa;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+  }
+  
+  td {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+  }
+  
+  tr:hover td {
+    background-color: rgba(0,0,0,0.02);
+  }
+}
+
+/* Row Color Coding - Main Feature from PDF */
+.row-passed {
+  background-color: rgba(76, 175, 80, 0.1) !important;
+  border-left: 4px solid #4caf50;
+  
+  &:hover {
+    background-color: rgba(76, 175, 80, 0.15) !important;
+  }
+}
+
+.row-failed {
+  background-color: rgba(244, 67, 54, 0.1) !important;
+  border-left: 4px solid #f44336;
+  
+  &:hover {
+    background-color: rgba(244, 67, 54, 0.15) !important;
+  }
+}
+
+/* Status Styling */
+.status-passed {
+  color: #4caf50;
+  
+  &.average-fill {
+    background-color: #4caf50;
+  }
+}
+
+.status-failed {
+  color: #f44336;
+  
+  &.average-fill {
+    background-color: #f44336;
+  }
+}
+
+.status-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  span {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Average Cell with Progress Bar */
+.average-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 80px;
+  
+  .average-value {
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .average-bar {
+    width: 100%;
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    
+    .average-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+  }
+}
+
+/* Exam Count Chip */
+.exam-chip {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  font-weight: 500;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* No Results State */
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 60px 20px;
-}
-
-.placeholder-content mat-icon {
-  font-size: 72px;
-  width: 72px;
-  height: 72px;
+  text-align: center;
   color: #666;
-  margin-bottom: 20px;
+  
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  p {
+    margin: 0 0 24px 0;
+    font-size: 14px;
+    max-width: 300px;
+    line-height: 1.5;
+  }
 }
 
-.placeholder-content h2 {
-  margin: 20px 0;
-  color: #333;
+/* Responsive Design - TABLET (1200px and below) */
+@media (max-width: 1200px) {
+  .monitor-container {
+    padding: 16px;
+    gap: 20px;
+  }
+  
+  .stats-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .stat-content {
+    gap: 12px;
+    
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+  
+  .stat-info .stat-number {
+    font-size: 20px;
+  }
+  
+  .header-section h2 {
+    font-size: 24px;
+  }
+  
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .ids-field {
+    min-width: unset;
+  }
+  
+  .names-field {
+    max-width: unset;
+  }
 }
 
-.placeholder-content ul {
-  text-align: left;
-  max-width: 300px;
-  margin: 20px auto;
+/* Responsive Design - MOBILE (768px and below) */
+@media (max-width: 768px) {
+  .monitor-container {
+    padding: 12px;
+    gap: 16px;
+  }
+  
+  .header-section {
+    h2 {
+      font-size: 20px;
+      flex-direction: column;
+      gap: 8px;
+      
+      mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+    }
+    
+    .subtitle {
+      font-size: 14px;
+    }
+  }
+  
+  .stats-section {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .stat-card {
+    mat-card-content {
+      padding: 12px !important;
+    }
+  }
+  
+  .stat-content {
+    gap: 12px;
+    
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  .stat-info {
+    .stat-number {
+      font-size: 18px;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+    }
+  }
+  
+  .filters-card {
+    mat-card-content {
+      padding: 12px !important;
+    }
+    
+    .filters-form {
+      gap: 16px;
+    }
+  }
+  
+  .state-checkboxes {
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  .filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    
+    button {
+      width: 100%;
+    }
+  }
+  
+  .table-container {
+    max-height: 400px;
+  }
+  
+  .monitor-table {
+    font-size: 14px;
+    
+    th, td {
+      padding: 8px 4px;
+    }
+  }
+  
+  .average-cell {
+    min-width: 60px;
+    
+    .average-value {
+      font-size: 14px;
+    }
+  }
+  
+  .status-cell {
+    gap: 4px;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+    
+    span {
+      font-size: 10px;
+    }
+  }
 }
 
-.placeholder-content li {
-  margin: 8px 0;
-  color: #666;
+/* Responsive Design - SMALL MOBILE (480px and below) */
+@media (max-width: 480px) {
+  .monitor-container {
+    padding: 8px;
+    gap: 12px;
+  }
+  
+  .header-section h2 {
+    font-size: 18px;
+  }
+  
+  .stat-content {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .stat-info .stat-number {
+    font-size: 16px;
+  }
+  
+  .monitor-table {
+    th, td {
+      padding: 6px 2px;
+      font-size: 12px;
+    }
+    
+    .status-cell span {
+      display: none; // Hide text, keep only icon on very small screens
+    }
+  }
+  
+  .exam-chip {
+    min-width: 30px;
+    font-size: 12px;
+  }
+  
+  .average-cell {
+    min-width: 50px;
+    
+    .average-value {
+      font-size: 12px;
+    }
+    
+    .average-bar {
+      height: 3px;
+    }
+  }
+}
+
+/* Focus and accessibility */
+.monitor-table {
+  tr:focus-within {
+    outline: 2px solid #3f51b5;
+    outline-offset: -2px;
+  }
+}
+
+button:focus {
+  outline: 2px solid #3f51b5;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .header-section,
+  .stats-section,
+  .filters-card {
+    page-break-inside: avoid;
+  }
+  
+  .monitor-table {
+    font-size: 12px;
+  }
+  
+  .filter-actions,
+  .loading-section {
+    display: none;
+  }
+  
+  .stats-section {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .row-passed {
+    background-color: rgba(76, 175, 80, 0.2) !important;
+    border-left-width: 6px;
+  }
+  
+  .row-failed {
+    background-color: rgba(244, 67, 54, 0.2) !important;
+    border-left-width: 6px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .stat-card {
+    transition: none;
+  }
+  
+  .average-fill {
+    transition: none;
+  }
+  
+  td {
+    transition: none;
+  }
 }
