@@ -1,26 +1,59 @@
 <div class="analysis-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>analytics</mat-icon>
-        Analysis Dashboard
-      </mat-card-title>
-      <mat-card-subtitle>
-        Coming Soon - Trainee Performance Analytics
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="placeholder-content">
-        <mat-icon>bar_chart</mat-icon>
-        <h2>Analysis Page</h2>
-        <p>This page will contain:</p>
-        <ul>
-          <li>Performance trend charts</li>
-          <li>Subject-wise grade distributions</li>
-          <li>Comparative analysis</li>
-          <li>Statistical insights</li>
-        </ul>
+  
+  <!-- Filters Section -->
+  <app-analysis-filters></app-analysis-filters>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading$ | async" class="loading-section">
+    <mat-card>
+      <mat-card-content class="loading-content">
+        <div class="loading-spinner">
+          <mat-icon>analytics</mat-icon>
+          <p>Loading analysis data...</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Charts Section -->
+  <div *ngIf="!(loading$ | async)" class="charts-section">
+    
+    <!-- Main Charts Area -->
+    <div class="main-charts" 
+         cdkDropListGroup>
+      
+      <!-- Left Chart (Position 0) -->
+      <div class="chart-panel left-chart">
+        <app-chart-container
+          [position]="0"
+          [chartPosition]="(leftChart$ | async)|| undefined"
+          [trainees]="(filteredTrainees$ | async) || []"
+          (chartSwapped)="onChartSwapped($event)">
+        </app-chart-container>
       </div>
-    </mat-card-content>
-  </mat-card>
+
+      <!-- Right Chart (Position 1) -->
+      <div class="chart-panel right-chart">
+        <app-chart-container
+          [position]="1"
+          [chartPosition]="(rightChart$ | async)||undefined"
+          [trainees]="(filteredTrainees$ | async)||[]"
+          (chartSwapped)="onChartSwapped($event)">
+        </app-chart-container>
+      </div>
+      
+    </div>
+
+    <!-- Hidden Chart Button (Position 2) -->
+    <div class="hidden-chart-section">
+      <app-chart-container
+        [position]="2"
+        [chartPosition]="(hiddenChart$ | async) || undefined"
+        [trainees]="(filteredTrainees$ | async) || []"
+        (chartSwapped)="onChartSwapped($event)">
+      </app-chart-container>
+    </div>
+    
+  </div>
+
 </div>

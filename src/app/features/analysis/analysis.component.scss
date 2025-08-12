@@ -1,34 +1,134 @@
 .analysis-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-.placeholder-content {
-  text-align: center;
-  padding: 60px 20px;
+.loading-section {
+  flex: 1;
 }
 
-.placeholder-content mat-icon {
-  font-size: 72px;
-  width: 72px;
-  height: 72px;
+.loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   color: #666;
-  margin-bottom: 20px;
 }
 
-.placeholder-content h2 {
-  margin: 20px 0;
-  color: #333;
+.loading-spinner mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
-.placeholder-content ul {
-  text-align: left;
-  max-width: 300px;
-  margin: 20px auto;
+.loading-spinner p {
+  margin: 0;
+  font-size: 16px;
 }
 
-.placeholder-content li {
-  margin: 8px 0;
-  color: #666;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.charts-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+}
+
+.main-charts {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  min-height: 400px;
+}
+
+.chart-panel {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden-chart-section {
+  flex-shrink: 0;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .analysis-container {
+    padding: 16px;
+  }
+  
+  .main-charts {
+    min-height: 350px;
+  }
+  
+  .chart-panel {
+    min-height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .analysis-container {
+    padding: 12px;
+    gap: 16px;
+  }
+  
+  .main-charts {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-height: 300px;
+  }
+  
+  .chart-panel {
+    min-height: 300px;
+  }
+  
+  .hidden-chart-section {
+    min-height: 60px;
+  }
+}
+
+/* Drag & Drop Visual Feedback */
+.cdk-drop-list.cdk-drop-list-receiving {
+  background-color: #f0f8ff;
+  border: 2px dashed #2196f3;
+  border-radius: 8px;
+}
+
+.cdk-drop-list-receiving .chart-panel {
+  opacity: 0.6;
+}
+
+/* Animation for chart swaps */
+.chart-panel {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Focus and accessibility */
+.chart-panel:focus-within {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+  border-radius: 8px;
 }
